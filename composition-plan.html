@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Composition Plan</title>
+        <style>
+            body{
+                font-family:Arial,sans-serif;
+                line-height:1.5;
+                max-width:90rem;
+                margin:auto;
+                padding:1rem;
+                color:#191919;
+                }
+            table{
+                width:100%;
+                border-collapse:collapse;
+                }
+            th,td{
+                padding:.6rem;
+                border:1px solid #999;
+                text-align:left;
+                vertical-align:top;
+                }
+            th{
+                background:#f1f1f1;
+                }
+        </style>
+        </head>
+        <body>
+            <h1>L6 · Composition Plan</h1>
+            <p>Complete one row for every positioned, layered, clipped, rounded, or shape-wrapped element. Duplicate rows as needed.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Element</th>
+                        <th>Content purpose</th>
+                        <th>Normal-flow baseline</th>
+                        <th>Chosen technique and why</th>
+                        <th>Containing block / stacking context</th>
+                        <th>Fallback or disengagement</th>
+                        <th>Required test</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>.figure-badge</td>
+                        <td>Shows featured picture with a visual label.</td>
+                        <td>With no positioning, it would be placed in the normal flow.</td>
+                        <td>I chose absolute positioning to place the badge in a specific location relative to its container picture.</td>
+                        <td>I used var(--layer-raised) for the z-index.</td>
+                        <td>If absolute positioning fails, it will fall back to the normal flow but still be readable.</td>
+                        <td>Chrome testing confirmed the badge is visible and properly positioned without disrupting the layout.</td>
+                    </tr>
+                      <tr>
+                        <td>.feature-figure</td>
+                        <td>Holds and displays the featured image, caption, and badge.</td>
+                        <td>It would remain in normal flow, but has no specific positioning.</td>
+                        <td>Relative positioning was used to allow for holding the figure in normal flow while giving positioning reference for its badge.</td>
+                        <td>No layer token, only relative positioning.</td> 
+                        <td>If removed, normal flow would continue but the badge would not be positioned as intended.</td>
+                        <td>Verify the image remains in normal flow while the badge is properly positioned in the corner.</td>
+                    </tr>
+                     <tr>
+                        <td>.story-guide</td>
+                        <td>Provides a guide for navigating the story.</td>
+                        <td>Without sticky positioning, it would remain in normal flow, but has no specific positioning and will scroll away with the page.</td>
+                        <td>Sticky positioning was used to keep the guide visible while scrolling.</td>
+                        <td>No layer token, sticky positioning creates a new stacking context.</td>
+                        <td>If removed, the guide would scroll away with the page.</td>
+                        <td>Scroll the page and verify the guide remains visible.</td>
+                    </tr>
+                          <tr>
+                        <td>.shape-portrait</td>
+                        <td>Creates a portrait-shaped container for the image without the surrounding text interfering.</td>
+                        <td>It would remain in normal flow, but no circular wrapping would be applied and the text falls below the image.</td>
+                        <td>float: inline-start was used to place the image at the left of its container. While shape-outside allowed the text to wrap around the image.</td>
+                        <td>No layer token needed, shape-outside creates a new stacking context through controlling wrapping..</td>
+                        <td>Without shape-outside, the text would not wrap around the image.</td>
+                        <td>Disable shape-outside and verify the text is readable and falls below the image.</td>
+                    </tr>
+                          <tr>
+                        <td>.feature-figure img</td>
+                        <td>Creates a featured image container without changing the layout.</td>
+                        <td>Without clip-path, the image would have a rectangular shape.</td>
+                        <td>Clip-path creates a polygon shape but doesn't take up any additional space.</td>
+                        <td>Clip-path creates a new stacking context without z-index.</td>
+                        <td>If removed, the image stays in its rectangular shape, and text is still readable.</td>
+                        <td>Add the disabling token to the clip-path property, verified the rectangular shape took form.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </body>
+        </html>
